@@ -4,7 +4,7 @@ import setuptools
 
 setuptools.setup(
     name="unapi",
-    version="0.2.2",
+    version="0.2.3",
     author="Donatus Herre",
     author_email="donatus.herre@slub-dresden.de",
     description="unAPI client for retrieving data from K10plus",
