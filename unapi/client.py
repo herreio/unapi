@@ -47,6 +47,7 @@ class Client:
         """
         Request data of entity specified by IDN in given schema.
         """
+        logger.info("Request record {0} in schema {1} from DB {2}.".format(idn, schema, self.DB))
         if schema in self.formats:
             schematype = self.formats[schema]['type']
             url = self.address(idn, schema)
