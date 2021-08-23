@@ -19,7 +19,8 @@ def main():
     unapi_args = unapi_cli.parse_args()
     client = Client(url=unapi_args.url, key=unapi_args.db, idtype=unapi_args.idtype)
     if unapi_args.formats:
-        supported = client.formats.keys()
+        supported = list(client.formats.keys())
+        supported.sort()
         logger.info("Database '{0}' supports the following formats:\n- {1}".format(client.key, "\n- ".join(supported)))
         return
     if unapi_args.id is None:
