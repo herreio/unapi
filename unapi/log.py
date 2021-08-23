@@ -1,0 +1,10 @@
+# -*- coding: utf-8 -*-
+
+import logging
+
+logger = logging.getLogger("unapi")
+stream = logging.StreamHandler()
+formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(name)s: %(message)s", "%Y-%m-%d %H:%M:%S")
+stream.setFormatter(formatter)
+logger.addHandler(stream)
+logger.setLevel(logging.DEBUG)
