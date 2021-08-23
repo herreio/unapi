@@ -17,14 +17,14 @@ pip install -e git+https://github.com/herreio/unapi.git#egg=unapi
 
 ```py
 import unapi
-client = unapi.Client(DB="swb")
+client = unapi.Client()
 record = client.request("1132450837", "pp")
 ```
 
 ### Command Line Interface
 
 ```sh
-unapi --db swb --record 1132450837 --schema pp
+unapi --id 1132450837 --format pp
 ```
 
 ## Reference
