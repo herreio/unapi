@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import argparse
+from lxml import etree
 
 from .client import Client
 from .utils import pretty_json, pretty_xml
@@ -19,9 +20,9 @@ def main():
         return
     client = Client(unapi_args.url, unapi_args.db, unapi_args.var)
     response = client.request(unapi_args.record, unapi_args.schema)
-    if "json" in unapi_args.schema:
+    if type(response) == dict or type(response) == list:
         response = pretty_json(response)
-    if "xml" in unapi_args.schema:
+    if type(response) == etree._Element:
         response = pretty_xml(response)
     if response is not None:
         print(response)
