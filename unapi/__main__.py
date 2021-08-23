@@ -22,7 +22,7 @@ def main():
         supported = client.formats.keys()
         logger.info("Database '{0}' supports the following formats:\n- {1}".format(client.DB, "\n- ".join(supported)))
         return
-    if not unapi_args.record:
+    if unapi_args.record is None:
         unapi_cli.print_help()
         return
     response = client.request(unapi_args.record, unapi_args.schema)
