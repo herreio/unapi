@@ -47,7 +47,7 @@ class Client:
         """
         Request data of entity specified by IDN in given schema.
         """
-        logger.info("Request record {0} in schema {1} from DB {2}.".format(idn, schema, self.DB))
+        logger.info("Request record {0} in schema '{1}' from DB '{2}'.".format(idn, schema, self.DB))
         formats = self.formats
         if schema in formats:
             schematype = formats[schema]['type']
@@ -63,5 +63,5 @@ class Client:
             else:
                 return response
         else:
-            logger.error("Schema {0} is unsupported!".format(schema))
+            logger.error("Schema '{0}' is unsupported!".format(schema))
             return None
