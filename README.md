@@ -29,5 +29,5 @@ unapi --id 1132450837 --format pp
 
 ## Reference
 
-[1] Chudnov, D., Binkley, P., Frumkin J., Giarlo, M. J., Rylander, M., Singer, R. & Summers E. (2006). Introducing unAPI. _Ariadne_ 48. http://www.ariadne.ac.uk/issue48/chudnov-et-al/  
+[1] Chudnov, D., Binkley, P., Frumkin J., Giarlo, M. J., Rylander, M., Singer, R. & Summers, E. (2006). Introducing unAPI. _Ariadne_ 48. http://www.ariadne.ac.uk/issue48/chudnov-et-al/  
 [2] https://wiki.k10plus.de/display/K10PLUS/UnAPI
