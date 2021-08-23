@@ -7,7 +7,7 @@ setuptools.setup(
     version="0.2.2",
     author="Donatus Herre",
     author_email="donatus.herre@slub-dresden.de",
-    description="unAPI Client",
+    description="unAPI client for retrieving data from K10plus",
     license=open("LICENSE").read(),
     url="https://github.com/herreio/unapi",
     packages=["unapi"],
