@@ -9,7 +9,7 @@ class Client:
     unAPI client for DB at given URL with entity identifiers of type VAR.
     """
 
-    def __init__(self, URL, DB, VAR):
+    def __init__(self, URL="https://unapi.k10plus.de", DB="swb", VAR="ppn"):
         self.URL = URL
         self.DB = DB
         self.VAR = VAR
