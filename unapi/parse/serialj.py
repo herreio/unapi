@@ -36,7 +36,7 @@ class SerialJson:
             if len(found) == 1:
                 return found[0]
             else:
-                logger.warning("{0}: Expected field {0} to be unique. Found {1} occurences.".format(self.name, name, len(found)))
+                logger.warning("{0}: Expected field {1} to be unique. Found {2} occurences.".format(self.name, name, len(found)))
         if len(found) > 0:
             return found
 
