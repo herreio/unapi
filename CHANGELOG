@@ -1,3 +1,12 @@
+0.3.1
+
+- update parser log output
+
+0.3.0
+
+- add parsing module
+- change default DB to opac-de-627
+
 0.2.3
 
 - update description in setup
