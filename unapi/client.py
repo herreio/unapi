@@ -9,7 +9,7 @@ class Client:
     unAPI client for DB identified by key at given URL with specified identifier type.
     """
 
-    def __init__(self, url="https://unapi.k10plus.de", key="swb", idtype="ppn"):
+    def __init__(self, url="https://unapi.k10plus.de", key="opac-de-627", idtype="ppn"):
         self.url = url
         self.key = key
         self.idtype = idtype
