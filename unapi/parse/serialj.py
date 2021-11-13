@@ -94,4 +94,4 @@ class SerialJson:
             else:
                 return self._value_from_rows(found, subfield, repeat=repeat, collapse=collapse)
         else:
-            logger.error("Field {0} not found!".format(field))
+            logger.error("{0}: Field {1} not found!".format(self.name, field))
