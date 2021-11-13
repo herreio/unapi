@@ -78,10 +78,9 @@ class SerialJson:
             if collapse:
                 return "||".join(found)
             if not repeat:
-                if all(len(sbf) == 1 for sbf in found):
-                    return [sbf[0] for sbf in found]
-                else:
+                if not all(len(sbf) == 1 for sbf in found):
                     logger.warning("{0}: Expected unrepeated subfield {1} in field {2}. Found mutiple occurences.".format(self.name, subfield, rows[0][0]))
+                return [sbf[0] for sbf in found]
             return found
         else:
             logger.error("{0}: Subfield {1} not found in field {2}!".format(self.name, subfield, rows[0][0]))
