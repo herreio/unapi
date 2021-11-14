@@ -1,3 +1,9 @@
+0.4.2
+
+- update PicaJson docstring
+- update Client.request docstring
+- update content of README
+
 0.4.1
 
 - improve parsing of PicaJson
