@@ -176,9 +176,9 @@ class PicaJson(SerialJson):
         """
         201A/7902: Datum der Ersterfassung (Exemplardaten)
         """
-        first_entry_date_objs = []
         first_entry_dates = self.get_holdings_first_entry_date(occurrence=occurrence)
         if first_entry_dates is not None:
+            first_entry_date_objs = []
             for first_entry_date in first_entry_dates:
                 first_entry_date_objs.append(datetime.datetime.strptime(first_entry_date, "%d-%m-%y").date())
             return first_entry_date_objs
@@ -187,9 +187,9 @@ class PicaJson(SerialJson):
         """
         201A/7902: Datum der Ersterfassung (Exemplardaten)
         """
-        first_entry_date_iso = []
         first_entry_dates = self.get_holdings_first_entry_date(occurrence=occurrence)
         if first_entry_dates is not None:
+            first_entry_date_iso = []
             for first_entry_date in first_entry_dates:
                 first_entry_date_iso.append(datetime.datetime.strptime(first_entry_date, "%d-%m-%y").date().isoformat())
             return first_entry_date_iso
@@ -305,7 +305,8 @@ class PicaJson(SerialJson):
             codes = []
             for sfe in source_first_entry:
                 codes.append(sfe.split(":")[0])
-            return codes
+            if len(codes) > 0:
+                return codes
 
     def get_holdings_source_first_entry_date(self, occurrence="01"):
         """
@@ -328,8 +329,8 @@ class PicaJson(SerialJson):
             dates = []
             for sfe_date in source_first_entry_date:
                 dates.append(datetime.datetime.strptime(sfe_date, "%d-%m-%y").date())
-        if len(dates) > 0:
-            return dates
+            if len(dates) > 0:
+                return dates
 
     def get_holdings_source_first_entry_date_iso(self, occurrence="01"):
         """
@@ -340,8 +341,8 @@ class PicaJson(SerialJson):
             dates = []
             for sfe_date in source_first_entry_date:
                 dates.append(sfe_date.isoformat())
-        if len(dates) > 0:
-            return dates
+            if len(dates) > 0:
+                return dates
 
     def get_holdings_eln_first_entry(self, eln, occurrence="01"):
         """
@@ -377,17 +378,132 @@ class PicaJson(SerialJson):
             dates = []
             for sfe_date in first_entry_date:
                 dates.append(datetime.datetime.strptime(sfe_date, "%d-%m-%y").date())
-        if len(dates) > 0:
-            return dates
+            if len(dates) > 0:
+                return dates
 
     def get_holdings_eln_first_entry_date_iso(self, eln, occurrence="01"):
         """
         201D/7901: Quelle und Datum der Ersterfassung (Exemplardaten) (in ISO format)
         """
-        dates = []
         first_entry_date = self.get_holdings_eln_first_entry_date_date(eln, occurrence=occurrence)
         if first_entry_date is not None:
+            dates = []
             for sfe_date in first_entry_date:
                 dates.append(sfe_date.isoformat())
-        if len(dates) > 0:
-            return dates
+            if len(dates) > 0:
+                return dates
+
+    def get_holdings_url(self, occurrence="01"):
+        """
+        209R/7133: Lokale Angaben zum Zugriff auf Online-Ressourcen (Exemplardaten)
+          $u    URL
+        """
+        return self.get_value("209R", "u", occurrence=occurrence, repeat=False)
+
+    def get_holdings_new_date(self, occurrence="01"):
+        """
+        208@/E001: Neuanlagedatum und Selektionsschlüssel (Exemplardaten)
+          $a    Neuanlagedatum
+        """
+        return self.get_value("208@", "a", occurrence=occurrence, repeat=False)
+
+    def get_holdings_new_date_date(self, occurrence="01"):
+        """
+        208@/E001: Neuanlagedatum und Selektionsschlüssel (Exemplardaten)
+          $a    Neuanlagedatum
+        """
+        new_date = self.get_value("208@", "a", occurrence=occurrence, repeat=False)
+        if new_date is not None:
+            dates = []
+            for n_date in new_date:
+                dates.append(datetime.datetime.strptime(n_date, "%d-%m-%y").date())
+            if len(dates) > 0:
+                return dates
+
+    def get_holdings_new_date_iso(self, occurrence="01"):
+        """
+        208@/E001: Neuanlagedatum und Selektionsschlüssel (Exemplardaten)
+          $a    Neuanlagedatum
+        """
+        new_date = self.get_holdings_new_date_date(occurrence=occurrence)
+        if new_date is not None:
+            dates = []
+            for n_date in new_date:
+                dates.append(n_date.isoformat())
+            if len(dates) > 0:
+                return dates
+
+    def get_holdings_isil_new_date(self, isil, occurrence="01"):
+        """
+        208@/E001: Neuanlagedatum und Selektionsschlüssel (Exemplardaten)
+          $a    Neuanlagedatum
+        209A/7100: Signatur (Exemplardaten)
+            $B    Sigel (nur SWB)
+        """
+        index = self.get_holdings_isil_index(isil, occurrence=occurrence)
+        if index is not None:
+            new_dates = self.get_holdings_new_date(occurrence=occurrence)
+            if new_dates is not None and len(new_dates) == self.get_holdings_isil_occurrence(occurrence=occurrence):
+                dates = []
+                for i in index:
+                    dates.append(new_dates[i])
+                if len(dates) > 0:
+                    return dates
+            else:
+                logger.error("{0}: Unequal number of holding ISILs and new dates".format(self.name))
+
+    def get_holdings_isil_new_date_date(self, isil, occurrence="01"):
+        """
+        208@/E001: Neuanlagedatum und Selektionsschlüssel (Exemplardaten)
+          $a    Neuanlagedatum (as date object)
+        209A/7100: Signatur (Exemplardaten)
+            $B    Sigel (nur SWB)
+        """
+        new_date = self.get_holdings_isil_new_date(isil, occurrence=occurrence)
+        if new_date is not None:
+            dates = []
+            for n_date in new_date:
+                dates.append(datetime.datetime.strptime(n_date, "%d-%m-%y").date())
+            if len(dates) > 0:
+                return dates
+
+    def get_holdings_isil_new_date_iso(self, isil, occurrence="01"):
+        """
+        208@/E001: Neuanlagedatum und Selektionsschlüssel (Exemplardaten)
+          $a    Neuanlagedatum (in ISO format)
+        209A/7100: Signatur (Exemplardaten)
+            $B    Sigel (nur SWB)
+        """
+        new_date = self.get_holdings_isil_new_date_date(isil, occurrence=occurrence)
+        if new_date is not None:
+            dates = []
+            for n_date in new_date:
+                dates.append(n_date.isoformat())
+            if len(dates) > 0:
+                return dates
+
+    def get_holdings_new_key(self, occurrence="01"):
+        """
+        208@/E001: Neuanlagedatum und Selektionsschlüssel (Exemplardaten)
+          $b    Selektionsschlüssel
+        """
+        return self.get_value("208@", "b", occurrence=occurrence, repeat=False)
+
+    def get_holdings_isil_new_key(self, isil, occurrence="01"):
+        """
+        208@/E001: Neuanlagedatum und Selektionsschlüssel (Exemplardaten)
+          $b    Selektionsschlüssel
+        209A/7100: Signatur (Exemplardaten)
+            $B    Sigel (nur SWB)
+        """
+        index = self.get_holdings_isil_index(isil, occurrence=occurrence)
+        if index is not None:
+            new_key = self.get_holdings_new_key(occurrence=occurrence)
+            if new_key is not None and len(new_key) == self.get_holdings_isil_occurrence(occurrence=occurrence):
+                keys = []
+                for i in index:
+                    keys.append(new_key[i])
+                if len(keys) > 0:
+                    return keys
+            else:
+                logger.error("{0}: Unequal number of holding ISILs and new keys".format(self.name))
