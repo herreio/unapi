@@ -1,12 +1,17 @@
+0.4.1
+
+- improve parsing of PicaJson
+- fix spelling of occurrence
+
 0.4.0
 
 - add parameter plain to Client.request
 - use plain response in unapi CLI
 - add parent class Parser
 - SerialJson inherits from Parser now
-- consider field occurence in SerialJson
-- consider field occurence in MarcJson
-- consider field occurence in PicaJson
+- consider field occurrence in SerialJson
+- consider field occurrence in MarcJson
+- consider field occurrence in PicaJson
 - add holding methods to PicaJson
 - add utility function tostr_xml
 
