@@ -129,8 +129,7 @@ class PicaJson(SerialJson):
     def get_holdings_isil_occurrence(self, occurrence="01"):
         """
         209A/7100: Signatur (Exemplardaten)
-
-        Das Unterfeld $B wird bei SWB-Bibliotheken im ersten Signaturfeld maschinell belegt.
+          $B    Sigel (nur SWB)
         """
         codes = self.get_holdings_isil(occurrence=occurrence)
         if codes is not None:
@@ -142,8 +141,6 @@ class PicaJson(SerialJson):
         """
         209A/7100: Signatur (Exemplardaten)
           $B    Sigel (nur SWB)
-
-        Das Unterfeld $B wird bei SWB-Bibliotheken im ersten Signaturfeld maschinell belegt.
         """
         codes = self.get_holdings_isil(occurrence=occurrence)
         if codes is not None:
