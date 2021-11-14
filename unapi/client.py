@@ -45,7 +45,7 @@ class Client:
 
     def request(self, idvalue, format, plain=False):
         """
-        Request data of record specified by ID in given format.
+        Request data of record specified by ID value in given format.
         """
         logger.info("Request record {0} in format '{1}' from DB '{2}'.".format(idvalue, format, self.key))
         formats = self.formats
