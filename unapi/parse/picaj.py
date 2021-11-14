@@ -110,9 +110,15 @@ class PicaJson(SerialJson):
         return self.get_value("045R", "a", unique=False, repeat=False, collapse=collapse)
 
     def get_holdings_ppn(self):
+        """
+        203@/7800: EPNs der Exemplardaten
+        """
         return self.get_value("203@", "0", repeat=False)
 
     def get_holdings_ilns(self):
+        """
+        101@: ILNs der Exemplardaten
+        """
         return self.get_value("101@", "a", repeat=False)
 
     def get_holdings_first_entry_date(self):
