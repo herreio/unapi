@@ -75,3 +75,10 @@ def pretty_xml(elements):
     Create a pretty formatted XML string.
     """
     return etree.tostring(elements, pretty_print=True).decode()
+
+
+def tostr_xml(elements):
+    """
+    Create an XML string.
+    """
+    return etree.tostring(elements).decode()
