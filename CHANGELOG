@@ -1,3 +1,9 @@
+0.3.3
+
+- add get_holdings methods to MarcJson and PicaJson
+- add parameter preserve to SerialJson.get_value
+- update handling of repeated subfields in SerialJson
+
 0.3.2
 
 - change defaults in main
