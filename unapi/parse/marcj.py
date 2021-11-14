@@ -82,27 +82,28 @@ class MarcJson(SerialJson):
         if date_entered is not None:
             return date_entered.isoformat()
 
-    def get_holdings_idn(self):
+    def get_holdings_idn(self, occurence="0"):
         """
         924/DNB: Bestandsinformationen (IDN)
         """
-        return self.get_value("924", "a", repeat=False)
+        return self.get_value("924", "a", occurence=occurence, repeat=False)
 
-    def get_holdings_isil(self):
+    def get_holdings_isil(self, occurence="0"):
         """
         924/DNB: Bestandsinformationen (ISIL)
         """
-        return self.get_value("924", "b", repeat=False)
+        return self.get_value("924", "b", occurence=occurence, repeat=False)
 
-    def get_holdings_from_isil(self, isil):
+    def get_holdings_from_isil(self, isil, occurence="0"):
         """
         924/DNB: Bestandsinformationen (IDN)
         """
-        isils = self.get_holdings_isil()
+        isils = self.get_holdings_isil(occurence=occurence)
         index = [i for i, s in enumerate(isils) if s == isil]
         if len(index) > 0:
-            ppns = self.get_value("924", "a", repeat=False)
-            if len(isils) == len(ppns):
-                return [ppns[i] for i in index]
-            else:
-                logger.error("{0}: Unequal number of holding ISILs and PPNs".format(self.name))
+            ppns = self.get_holdings_idn()
+            if ppns is not None:
+                if len(isils) == len(ppns):
+                    return [ppns[i] for i in index]
+                else:
+                    logger.error("{0}: Unequal number of holding ISILs and PPNs".format(self.name))
