@@ -1,3 +1,32 @@
+0.4.2
+
+- update PicaJson docstring
+- update Client.request docstring
+- update content of README
+
+0.4.1
+
+- improve parsing of PicaJson
+- fix spelling of occurrence
+
+0.4.0
+
+- add parameter plain to Client.request
+- use plain response in unapi CLI
+- add parent class Parser
+- SerialJson inherits from Parser now
+- consider field occurrence in SerialJson
+- consider field occurrence in MarcJson
+- consider field occurrence in PicaJson
+- add holding methods to PicaJson
+- add utility function tostr_xml
+
+0.3.3
+
+- add get_holdings methods to MarcJson and PicaJson
+- add parameter preserve to SerialJson.get_value
+- update handling of repeated subfields in SerialJson
+
 0.3.2
 
 - change defaults in main

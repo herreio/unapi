@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from ..log import logger
+
 import datetime
 
 from .serialj import SerialJson
@@ -79,3 +81,29 @@ class MarcJson(SerialJson):
         date_entered = self.get_date_entered_date()
         if date_entered is not None:
             return date_entered.isoformat()
+
+    def get_holdings_idn(self, occurrence="0"):
+        """
+        924/DNB: Bestandsinformationen (IDN)
+        """
+        return self.get_value("924", "a", occurrence=occurrence, repeat=False)
+
+    def get_holdings_isil(self, occurrence="0"):
+        """
+        924/DNB: Bestandsinformationen (ISIL)
+        """
+        return self.get_value("924", "b", occurrence=occurrence, repeat=False)
+
+    def get_holdings_from_isil(self, isil, occurrence="0"):
+        """
+        924/DNB: Bestandsinformationen (IDN)
+        """
+        isils = self.get_holdings_isil(occurrence=occurrence)
+        index = [i for i, s in enumerate(isils) if s == isil]
+        if len(index) > 0:
+            ppns = self.get_holdings_idn()
+            if ppns is not None:
+                if len(isils) == len(ppns):
+                    return [ppns[i] for i in index]
+                else:
+                    logger.error("{0}: Unequal number of holding ISILs and PPNs".format(self.name))

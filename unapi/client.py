@@ -43,9 +43,9 @@ class Client:
         return self.url + "/?id=" + self.key + ":" + \
             self.idtype + ":" + idvalue + "&format=" + format
 
-    def request(self, idvalue, format):
+    def request(self, idvalue, format, plain=False):
         """
-        Request data of record specified by ID in given format.
+        Request data of record specified by ID value in given format.
         """
         logger.info("Request record {0} in format '{1}' from DB '{2}'.".format(idvalue, format, self.key))
         formats = self.formats
@@ -54,14 +54,14 @@ class Client:
             url = self.address(idvalue, format)
             response = utils.get_request(url)
             if response is not None:
-                if "xml" in formattype:
-                    return utils.response_xml(response)
-                elif "json" in formattype:
-                    return utils.response_json(response)
-                else:
+                if plain:
                     return utils.response_text(response)
-            else:
-                return response
+                else:
+                    if "xml" in formattype:
+                        return utils.response_xml(response)
+                    elif "json" in formattype:
+                        return utils.response_json(response)
+                    else:
+                        return utils.response_text(response)
         else:
             logger.error("Format '{0}' is unsupported!".format(format))
-            return None

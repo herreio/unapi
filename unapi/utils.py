@@ -11,7 +11,7 @@ def get_request(url, headers={}):
     Send HTTP GET request to given URL.
     """
     if "User-Agent" not in headers:
-        headers["User-Agent"] = "py-unapi 0.3.2"
+        headers["User-Agent"] = "py-unapi 0.4.2"
     try:
         return requests.get(url, headers=headers)
     except requests.exceptions.RequestException as err:
@@ -75,3 +75,10 @@ def pretty_xml(elements):
     Create a pretty formatted XML string.
     """
     return etree.tostring(elements, pretty_print=True).decode()
+
+
+def tostr_xml(elements):
+    """
+    Create an XML string.
+    """
+    return etree.tostring(elements).decode()
