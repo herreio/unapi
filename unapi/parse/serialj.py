@@ -62,7 +62,7 @@ class SerialJson:
                         logger.warning("{0}: Expected unrepeated subfield {1} in field {2}. Found mutiple occurences.".format(self.name, subfield, row[0]))
                 return [row[p] for p in pos]
 
-    def _value_from_rows(self, rows, subfield, repeat=True, collapse=False):
+    def _value_from_rows(self, rows, subfield, repeat=True, collapse=False, preserve=True):
         found = []
         for row in rows:
             sub_found = []
@@ -70,10 +70,11 @@ class SerialJson:
             if pos is not None:
                 for p in pos:
                     sub_found.append(row[p])
+            elif preserve:
+                sub_found.append("")
             if collapse:
                 sub_found = "|".join(sub_found)
-            if len(sub_found) > 0:
-                found.append(sub_found)
+            found.append(sub_found)
         if len(found) > 0:
             if collapse:
                 return "||".join(found)
@@ -85,12 +86,12 @@ class SerialJson:
         else:
             logger.error("{0}: Subfield {1} not found in field {2}!".format(self.name, subfield, rows[0][0]))
 
-    def get_value(self, field, subfield, unique=False, repeat=True, collapse=False):
+    def get_value(self, field, subfield, unique=False, repeat=True, collapse=False, preserve=True):
         found = self.get_field(field, unique=unique)
         if found is not None:
             if unique and type(found[0]) != list:
                 return self._value_from_row(found, subfield, repeat=repeat)
             else:
-                return self._value_from_rows(found, subfield, repeat=repeat, collapse=collapse)
+                return self._value_from_rows(found, subfield, repeat=repeat, collapse=collapse, preserve=True)
         else:
             logger.error("{0}: Field {1} not found!".format(self.name, field))
