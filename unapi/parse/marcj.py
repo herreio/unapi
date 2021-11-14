@@ -82,23 +82,23 @@ class MarcJson(SerialJson):
         if date_entered is not None:
             return date_entered.isoformat()
 
-    def get_holdings_idn(self, occurence="0"):
+    def get_holdings_idn(self, occurrence="0"):
         """
         924/DNB: Bestandsinformationen (IDN)
         """
-        return self.get_value("924", "a", occurence=occurence, repeat=False)
+        return self.get_value("924", "a", occurrence=occurrence, repeat=False)
 
-    def get_holdings_isil(self, occurence="0"):
+    def get_holdings_isil(self, occurrence="0"):
         """
         924/DNB: Bestandsinformationen (ISIL)
         """
-        return self.get_value("924", "b", occurence=occurence, repeat=False)
+        return self.get_value("924", "b", occurrence=occurrence, repeat=False)
 
-    def get_holdings_from_isil(self, isil, occurence="0"):
+    def get_holdings_from_isil(self, isil, occurrence="0"):
         """
         924/DNB: Bestandsinformationen (IDN)
         """
-        isils = self.get_holdings_isil(occurence=occurence)
+        isils = self.get_holdings_isil(occurrence=occurrence)
         index = [i for i, s in enumerate(isils) if s == isil]
         if len(index) > 0:
             ppns = self.get_holdings_idn()

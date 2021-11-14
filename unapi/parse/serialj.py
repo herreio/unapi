@@ -27,18 +27,18 @@ class SerialJson(Parser):
         if name in self.idx:
             return self.idx[name]
 
-    def get_field(self, name, occurence=None, unique=False):
+    def get_field(self, name, occurrence=None, unique=False):
         found = []
         positions = self._field_pos(name)
         if positions is not None:
             for i in positions:
-                if self.data[i][1] == occurence:
+                if self.data[i][1] == occurrence:
                     found.append(self.data[i])
         if unique:
             if len(found) == 1:
                 return found[0]
             else:
-                logger.warning("{0}: Expected field {1} to be unique. Found {2} occurences.".format(self.name, name, len(found)))
+                logger.warning("{0}: Expected field {1} to be unique. Found {2} occurrences.".format(self.name, name, len(found)))
         if len(found) > 0:
             return found
 
@@ -61,7 +61,7 @@ class SerialJson(Parser):
                     if all(len(row[p]) == 1 for p in pos):
                         return [row[p][0] for p in pos]
                     else:
-                        logger.warning("{0}: Expected unrepeated subfield {1} in field {2}. Found mutiple occurences.".format(self.name, subfield, row[0]))
+                        logger.warning("{0}: Expected unrepeated subfield {1} in field {2}. Found mutiple occurrences.".format(self.name, subfield, row[0]))
                 return [row[p] for p in pos]
 
     def _value_from_rows(self, rows, subfield, repeat=True, collapse=False, preserve=True):
@@ -82,18 +82,18 @@ class SerialJson(Parser):
                 return "||".join(found)
             if not repeat:
                 if not all(len(sbf) == 1 for sbf in found):
-                    logger.warning("{0}: Expected unrepeated subfield {1} in field {2}. Found mutiple occurences.".format(self.name, subfield, rows[0][0]))
+                    logger.warning("{0}: Expected unrepeated subfield {1} in field {2}. Found mutiple occurrences.".format(self.name, subfield, rows[0][0]))
                 return [sbf[0] for sbf in found]
             return found
         else:
             logger.error("{0}: Subfield {1} not found in field {2}!".format(self.name, subfield, rows[0][0]))
 
-    def get_value(self, field, subfield, occurence=None, unique=False, repeat=True, collapse=False, preserve=True):
-        found = self.get_field(field, occurence=occurence, unique=unique)
+    def get_value(self, field, subfield, occurrence=None, unique=False, repeat=True, collapse=False, preserve=True):
+        found = self.get_field(field, occurrence=occurrence, unique=unique)
         if found is not None:
             if unique and type(found[0]) != list:
                 return self._value_from_row(found, subfield, repeat=repeat)
             else:
                 return self._value_from_rows(found, subfield, repeat=repeat, collapse=collapse, preserve=True)
         else:
-            logger.error("{0}: Field {1} with occurence {2} not found!".format(self.name, field, occurence))
+            logger.error("{0}: Field {1} with occurrence {2} not found!".format(self.name, field, occurrence))

@@ -105,62 +105,62 @@ class PicaJson(SerialJson):
         """
         return self.get_value("045R", "a", unique=False, repeat=False, collapse=collapse)
 
-    def get_holdings_ppn(self, occurence="01"):
+    def get_holdings_ppn(self, occurrence="01"):
         """
         203@/7800: EPNs der Exemplardaten
         """
-        return self.get_value("203@", "0", occurence=occurence, repeat=False)
+        return self.get_value("203@", "0", occurrence=occurrence, repeat=False)
 
-    def get_holdings_ilns(self, occurence=None):
+    def get_holdings_ilns(self, occurrence=None):
         """
         101@: ILNs der Exemplardaten
         """
-        return self.get_value("101@", "a", occurence=occurence, repeat=False)
+        return self.get_value("101@", "a", occurrence=occurrence, repeat=False)
 
-    def get_holdings_isil(self, occurence="01"):
+    def get_holdings_isil(self, occurrence="01"):
         """
         209A/7100: Signatur (Exemplardaten)
           $B    Sigel (nur SWB)
 
         Das Unterfeld $B wird bei SWB-Bibliotheken im ersten Signaturfeld maschinell belegt.
         """
-        return self.get_value("209A", "B", occurence=occurence, repeat=False)
+        return self.get_value("209A", "B", occurrence=occurrence, repeat=False)
 
-    def get_holdings_isil_occurence(self, occurence="01"):
+    def get_holdings_isil_occurrence(self, occurrence="01"):
         """
         209A/7100: Signatur (Exemplardaten)
 
         Das Unterfeld $B wird bei SWB-Bibliotheken im ersten Signaturfeld maschinell belegt.
         """
-        codes = self.get_holdings_isil(occurence=occurence)
+        codes = self.get_holdings_isil(occurrence=occurrence)
         if codes is not None:
             return len(codes)
         else:
             return 0
 
-    def get_holdings_isil_index(self, isil, occurence="01"):
+    def get_holdings_isil_index(self, isil, occurrence="01"):
         """
         209A/7100: Signatur (Exemplardaten)
           $B    Sigel (nur SWB)
 
         Das Unterfeld $B wird bei SWB-Bibliotheken im ersten Signaturfeld maschinell belegt.
         """
-        codes = self.get_holdings_isil(occurence=occurence)
+        codes = self.get_holdings_isil(occurrence=occurrence)
         if codes is not None:
             index = [i for i, c in enumerate(codes) if c == isil]
             if len(index) > 0:
                 return index
 
-    def get_holdings_from_isil(self, isil, occurence="01"):
+    def get_holdings_from_isil(self, isil, occurrence="01"):
         """
         203@/7800: EPNs der Exemplardaten
         209A/7100: Signatur (Exemplardaten)
             $B    Sigel (nur SWB)
         """
-        index = self.get_holdings_isil_index(isil, occurence=occurence)
+        index = self.get_holdings_isil_index(isil, occurrence=occurrence)
         if index is not None:
-            epns = self.get_holdings_ppn(occurence=occurence)
-            if epns is not None and len(epns) == self.get_holdings_isil_occurence(occurence=occurence):
+            epns = self.get_holdings_ppn(occurrence=occurrence)
+            if epns is not None and len(epns) == self.get_holdings_isil_occurrence(occurrence=occurrence):
                 holdings = []
                 for i in index:
                     holdings.append(epns[i])
@@ -169,52 +169,52 @@ class PicaJson(SerialJson):
             else:
                 logger.error("{0}: Unequal number of holding ISILs and PPNs".format(self.name))
 
-    def get_holdings_first_entry_date(self, occurence="01"):
+    def get_holdings_first_entry_date(self, occurrence="01"):
         """
         201A/7902: Datum der Ersterfassung (Exemplardaten)
         """
-        return self.get_value("201A", "0", occurence=occurence, repeat=False)
+        return self.get_value("201A", "0", occurrence=occurrence, repeat=False)
 
-    def get_holdings_first_entry_date_date(self, occurence="01"):
+    def get_holdings_first_entry_date_date(self, occurrence="01"):
         """
         201A/7902: Datum der Ersterfassung (Exemplardaten)
         """
         first_entry_date_objs = []
-        first_entry_dates = self.get_holdings_first_entry_date(occurence=occurence)
+        first_entry_dates = self.get_holdings_first_entry_date(occurrence=occurrence)
         if first_entry_dates is not None:
             for first_entry_date in first_entry_dates:
                 first_entry_date_objs.append(datetime.datetime.strptime(first_entry_date, "%d-%m-%y").date())
             return first_entry_date_objs
 
-    def get_holdings_first_entry_date_iso(self, occurence="01"):
+    def get_holdings_first_entry_date_iso(self, occurrence="01"):
         """
         201A/7902: Datum der Ersterfassung (Exemplardaten)
         """
         first_entry_date_iso = []
-        first_entry_dates = self.get_holdings_first_entry_date(occurence=occurence)
+        first_entry_dates = self.get_holdings_first_entry_date(occurrence=occurrence)
         if first_entry_dates is not None:
             for first_entry_date in first_entry_dates:
                 first_entry_date_iso.append(datetime.datetime.strptime(first_entry_date, "%d-%m-%y").date().isoformat())
             return first_entry_date_iso
 
-    def get_holdings_latest_change_date(self, occurence="01"):
+    def get_holdings_latest_change_date(self, occurrence="01"):
         """
         201B/7903: Datum und Uhrzeit der letzten Änderung (Exemplardaten)
         """
-        return self.get_value("201B", "0", occurence=occurence, repeat=False)
+        return self.get_value("201B", "0", occurrence=occurrence, repeat=False)
 
-    def get_holdings_latest_change_time(self, occurence="01"):
+    def get_holdings_latest_change_time(self, occurrence="01"):
         """
         201B/7903: Datum und Uhrzeit der letzten Änderung (Exemplardaten)
         """
-        return self.get_value("201B", "t", occurence=occurence, repeat=False)
+        return self.get_value("201B", "t", occurrence=occurrence, repeat=False)
 
-    def get_holdings_latest_change_str(self, occurence="01"):
+    def get_holdings_latest_change_str(self, occurrence="01"):
         """
         201B/7903: Datum und Uhrzeit der letzten Änderung (Exemplardaten)
         """
-        latest_change_date = self.get_holdings_latest_change_date(occurence=occurence)
-        latest_change_time = self.get_holdings_latest_change_time(occurence=occurence)
+        latest_change_date = self.get_holdings_latest_change_date(occurrence=occurrence)
+        latest_change_time = self.get_holdings_latest_change_time(occurrence=occurrence)
         if latest_change_date is not None and latest_change_time is not None:
             if len(latest_change_date) != len(latest_change_time):
                 logger.error("{0}: Unequal number of edit dates and times in holding data!".format(self.name))
@@ -225,11 +225,11 @@ class PicaJson(SerialJson):
             if len(latest_change_str) > 0:
                 return latest_change_str
 
-    def get_holdings_latest_change_datetime(self, occurence="01"):
+    def get_holdings_latest_change_datetime(self, occurrence="01"):
         """
         201B/7903: Datum und Uhrzeit der letzten Änderung (Exemplardaten) (as datetime object)
         """
-        change_str = self.get_holdings_latest_change_str(occurence=occurence)
+        change_str = self.get_holdings_latest_change_str(occurrence=occurrence)
         if change_str is not None:
             latest_change_datetime = []
             for ch_str in change_str:
@@ -240,11 +240,11 @@ class PicaJson(SerialJson):
             if len(latest_change_datetime) > 0:
                 return latest_change_datetime
 
-    def get_holdings_latest_change_iso(self, occurence="01"):
+    def get_holdings_latest_change_iso(self, occurrence="01"):
         """
         201B/7903: Datum und Uhrzeit der letzten Änderung (Exemplardaten) (in ISO format)
         """
-        change_str = self.get_holdings_latest_change_str(occurence=occurence)
+        change_str = self.get_holdings_latest_change_str(occurrence=occurrence)
         if change_str is not None:
             latest_change_iso = []
             for ch_str in change_str:
@@ -255,25 +255,25 @@ class PicaJson(SerialJson):
             if len(latest_change_iso) > 0:
                 return latest_change_iso
 
-    def get_holdings_isil_latest_change_str(self, isil, occurence="01"):
+    def get_holdings_isil_latest_change_str(self, isil, occurrence="01"):
         """
         201B/7903: Datum und Uhrzeit der letzten Änderung (Exemplardaten)
         """
         index = self.get_holdings_isil_index(isil)
         if index is not None:
             isil_latest_change_str = []
-            change_str = self.get_holdings_latest_change_str(occurence=occurence)
+            change_str = self.get_holdings_latest_change_str(occurrence=occurrence)
             if change_str is not None:
                 for i in index:
                     isil_latest_change_str.append(change_str[i])
             if len(isil_latest_change_str) > 0:
                 return isil_latest_change_str
 
-    def get_holdings_isil_latest_change_datetime(self, isil, occurence="01"):
+    def get_holdings_isil_latest_change_datetime(self, isil, occurrence="01"):
         """
         201B/7903: Datum und Uhrzeit der letzten Änderung (Exemplardaten) (as datetime object)
         """
-        change_str = self.get_holdings_isil_latest_change_str(isil, occurence=occurence)
+        change_str = self.get_holdings_isil_latest_change_str(isil, occurrence=occurrence)
         if change_str is not None:
             latest_change_datetime = []
             for ch_str in change_str:
@@ -281,11 +281,11 @@ class PicaJson(SerialJson):
             if len(latest_change_datetime) > 0:
                 return latest_change_datetime
 
-    def get_holdings_isil_latest_change_iso(self, isil, occurence="01"):
+    def get_holdings_isil_latest_change_iso(self, isil, occurrence="01"):
         """
         201B/7903: Datum und Uhrzeit der letzten Änderung (Exemplardaten) (in ISO format)
         """
-        change_str = self.get_holdings_isil_latest_change_str(isil, occurence=occurence)
+        change_str = self.get_holdings_isil_latest_change_str(isil, occurrence=occurrence)
         if change_str is not None:
             latest_change_iso = []
             for ch_str in change_str:
@@ -293,28 +293,28 @@ class PicaJson(SerialJson):
             if len(latest_change_iso) > 0:
                 return latest_change_iso
 
-    def get_holdings_source_first_entry(self, occurence="01"):
+    def get_holdings_source_first_entry(self, occurrence="01"):
         """
         201D/7901: Quelle und Datum der Ersterfassung (Exemplardaten)
         """
-        return self.get_value("201D", "0", occurence=occurence, repeat=False)
+        return self.get_value("201D", "0", occurrence=occurrence, repeat=False)
 
-    def get_holdings_source_first_entry_eln(self, occurence="01"):
+    def get_holdings_source_first_entry_eln(self, occurrence="01"):
         """
         201D/7901: Quelle der Ersterfassung (Exemplardaten)
         """
-        source_first_entry = self.get_holdings_source_first_entry(occurence=occurence)
+        source_first_entry = self.get_holdings_source_first_entry(occurrence=occurrence)
         if source_first_entry is not None:
             codes = []
             for sfe in source_first_entry:
                 codes.append(sfe.split(":")[0])
             return codes
 
-    def get_holdings_source_first_entry_date(self, occurence="01"):
+    def get_holdings_source_first_entry_date(self, occurrence="01"):
         """
         201D/7901: Datum der Ersterfassung (Exemplardaten)
         """
-        source_first_entry = self.get_holdings_source_first_entry(occurence=occurence)
+        source_first_entry = self.get_holdings_source_first_entry(occurrence=occurrence)
         if source_first_entry is not None:
             dates = []
             for sfe in source_first_entry:
@@ -322,11 +322,11 @@ class PicaJson(SerialJson):
             if len(dates) > 0:
                 return dates
 
-    def get_holdings_source_first_entry_date_date(self, occurence="01"):
+    def get_holdings_source_first_entry_date_date(self, occurrence="01"):
         """
         201D/7901: Datum der Ersterfassung (Exemplardaten) (as date object)
         """
-        source_first_entry_date = self.get_holdings_source_first_entry_date(occurence=occurence)
+        source_first_entry_date = self.get_holdings_source_first_entry_date(occurrence=occurrence)
         if source_first_entry_date is not None:
             dates = []
             for sfe_date in source_first_entry_date:
@@ -334,11 +334,11 @@ class PicaJson(SerialJson):
         if len(dates) > 0:
             return dates
 
-    def get_holdings_source_first_entry_date_iso(self, occurence="01"):
+    def get_holdings_source_first_entry_date_iso(self, occurrence="01"):
         """
         201D/7901: Quelle und Datum der Ersterfassung (Exemplardaten) (in ISO format)
         """
-        source_first_entry_date = self.get_holdings_source_first_entry_date_date(occurence=occurence)
+        source_first_entry_date = self.get_holdings_source_first_entry_date_date(occurrence=occurrence)
         if source_first_entry_date is not None:
             dates = []
             for sfe_date in source_first_entry_date:
@@ -346,24 +346,24 @@ class PicaJson(SerialJson):
         if len(dates) > 0:
             return dates
 
-    def get_holdings_eln_first_entry(self, eln, occurence="01"):
+    def get_holdings_eln_first_entry(self, eln, occurrence="01"):
         """
         201D/7901: Quelle und Datum der Ersterfassung (Exemplardaten)
         """
-        elns = self.get_holdings_source_first_entry_eln(occurence=occurence)
+        elns = self.get_holdings_source_first_entry_eln(occurrence=occurrence)
         if elns is not None and eln in elns:
             eln_entries = []
-            entries = self.get_holdings_source_first_entry(occurence=occurence)
+            entries = self.get_holdings_source_first_entry(occurrence=occurrence)
             if entries is not None:
                 eln_entries = [e for e in entries if eln in e]
             if len(eln_entries) > 0:
                 return eln_entries
 
-    def get_holdings_eln_first_entry_date(self, eln, occurence="01"):
+    def get_holdings_eln_first_entry_date(self, eln, occurrence="01"):
         """
         201D/7901: Datum der Ersterfassung (Exemplardaten)
         """
-        first_entry_date = self.get_holdings_eln_first_entry(eln, occurence=occurence)
+        first_entry_date = self.get_holdings_eln_first_entry(eln, occurrence=occurrence)
         if first_entry_date is not None:
             dates = []
             for sfe in first_entry_date:
@@ -371,11 +371,11 @@ class PicaJson(SerialJson):
             if len(dates) > 0:
                 return dates
 
-    def get_holdings_eln_first_entry_date_date(self, eln, occurence="01"):
+    def get_holdings_eln_first_entry_date_date(self, eln, occurrence="01"):
         """
         201D/7901: Datum der Ersterfassung (Exemplardaten) (as date object)
         """
-        first_entry_date = self.get_holdings_eln_first_entry_date(eln, occurence=occurence)
+        first_entry_date = self.get_holdings_eln_first_entry_date(eln, occurrence=occurrence)
         if first_entry_date is not None:
             dates = []
             for sfe_date in first_entry_date:
@@ -383,12 +383,12 @@ class PicaJson(SerialJson):
         if len(dates) > 0:
             return dates
 
-    def get_holdings_eln_first_entry_date_iso(self, eln, occurence="01"):
+    def get_holdings_eln_first_entry_date_iso(self, eln, occurrence="01"):
         """
         201D/7901: Quelle und Datum der Ersterfassung (Exemplardaten) (in ISO format)
         """
         dates = []
-        first_entry_date = self.get_holdings_eln_first_entry_date_date(eln, occurence=occurence)
+        first_entry_date = self.get_holdings_eln_first_entry_date_date(eln, occurrence=occurrence)
         if first_entry_date is not None:
             for sfe_date in first_entry_date:
                 dates.append(sfe_date.isoformat())
