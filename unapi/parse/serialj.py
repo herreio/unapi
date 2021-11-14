@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 
 from ..log import logger
+from .base import Parser
 
 
-class SerialJson:
+class SerialJson(Parser):
     """
     Generic class for parsing MARC JSON or PICA JSON
     """
 
     def __init__(self, data):
-        self.data = data
+        super().__init__(data)
         self.idx = self._indices()
         self.name = type(self).__name__
 
@@ -26,12 +27,13 @@ class SerialJson:
         if name in self.idx:
             return self.idx[name]
 
-    def get_field(self, name, unique=False):
+    def get_field(self, name, occurence=None, unique=False):
         found = []
         positions = self._field_pos(name)
         if positions is not None:
             for i in positions:
-                found.append(self.data[i])
+                if self.data[i][1] == occurence:
+                    found.append(self.data[i])
         if unique:
             if len(found) == 1:
                 return found[0]
@@ -86,12 +88,12 @@ class SerialJson:
         else:
             logger.error("{0}: Subfield {1} not found in field {2}!".format(self.name, subfield, rows[0][0]))
 
-    def get_value(self, field, subfield, unique=False, repeat=True, collapse=False, preserve=True):
-        found = self.get_field(field, unique=unique)
+    def get_value(self, field, subfield, occurence=None, unique=False, repeat=True, collapse=False, preserve=True):
+        found = self.get_field(field, occurence=occurence, unique=unique)
         if found is not None:
             if unique and type(found[0]) != list:
                 return self._value_from_row(found, subfield, repeat=repeat)
             else:
                 return self._value_from_rows(found, subfield, repeat=repeat, collapse=collapse, preserve=True)
         else:
-            logger.error("{0}: Field {1} not found!".format(self.name, field))
+            logger.error("{0}: Field {1} with occurence {2} not found!".format(self.name, field, occurence))
