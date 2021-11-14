@@ -1,3 +1,15 @@
+0.4.0
+
+- add parameter plain to Client.request
+- use plain response in unapi CLI
+- add parent class Parser
+- SerialJson inherits from Parser now
+- consider field occurence in SerialJson
+- consider field occurence in MarcJson
+- consider field occurence in PicaJson
+- add holding methods to PicaJson
+- add utility function tostr_xml
+
 0.3.3
 
 - add get_holdings methods to MarcJson and PicaJson
