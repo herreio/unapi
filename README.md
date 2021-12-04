@@ -27,25 +27,6 @@ client = unapi.Client()
 record = client.request("1132450837", "pp")
 ```
 
-#### Parse Response
-
-```py
-# import parser class, PicaJson and MarcJson are available
-from unapi import PicaJson
-# request format picajson (default: pp)
-record = client.request("1132450837", "picajson")
-# create parser instance
-record_pica = PicaJson(record)
-# parse first entry field
-first_entry = record_pica.get_value("001A", "0", unique=True)
-first_entry_eln = first_entry.split(":")[0]
-first_entry_date = first_entry.split(":")[1]
-# parse first entry date
-import datetime
-first_entry_date_obj = datetime.datetime.strptime(first_entry_date, "%d-%m-%y").date()
-first_entry_date_iso = first_entry_date_obj.isoformat()
-```
-
 ## References
 
 [1] Chudnov, D., Binkley, P., Frumkin J., Giarlo, M. J., Rylander, M., Singer, R. & Summers, E. (2006). Introducing unAPI. _Ariadne_ 48. http://www.ariadne.ac.uk/issue48/chudnov-et-al/  
