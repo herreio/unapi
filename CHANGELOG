@@ -1,3 +1,7 @@
+0.5.0
+
+- create separate package from parse module
+
 0.4.3
 
 - update PicaJson holding methods
