@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import logging
 from . import utils
-from .log import logger
 
 
 class Client:
@@ -9,10 +9,11 @@ class Client:
     unAPI client for DB identified by key at given URL with specified identifier type.
     """
 
-    def __init__(self, url="https://unapi.k10plus.de", key="opac-de-627", idtype="ppn"):
+    def __init__(self, url="https://unapi.k10plus.de", key="opac-de-627", idtype="ppn", loglevel=logging.DEBUG):
         self.url = url
         self.key = key
         self.idtype = idtype
+        self.logger = utils.get_logger(loglevel)
 
     @property
     def formats(self):
@@ -47,7 +48,7 @@ class Client:
         """
         Request data of record specified by ID value in given format.
         """
-        logger.info("Request record {0} in format '{1}' from DB '{2}'.".format(idvalue, format, self.key))
+        self.logger.info("Request record {0} in format '{1}' from DB '{2}'.".format(idvalue, format, self.key))
         formats = self.formats
         if format in formats:
             formattype = formats[format]['type']
@@ -64,4 +65,4 @@ class Client:
                     else:
                         return utils.response_text(response)
         else:
-            logger.error("Format '{0}' is unsupported!".format(format))
+            self.logger.error("Format '{0}' is unsupported!".format(format))

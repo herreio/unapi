@@ -2,7 +2,6 @@
 
 import argparse
 
-from .log import logger
 from .client import Client
 
 
@@ -19,15 +18,15 @@ def main():
     if unapi_args.formats:
         supported = list(client.formats.keys())
         supported.sort()
-        logger.info("Database '{0}' supports the following formats:\n- {1}".format(client.key, "\n- ".join(supported)))
-        return
+        print("Database '{0}' supports the following formats:\n- {1}".format(client.key, "\n- ".join(supported)))
+        return None
     if unapi_args.id is None:
         unapi_cli.print_help()
-        return
+        return None
     response = client.request(unapi_args.id, unapi_args.format, plain=True)
     if response is not None:
         print(response)
-        return
+        return None
 
 
 if __name__ == '__main__':
