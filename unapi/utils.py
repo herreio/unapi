@@ -1,9 +1,28 @@
 # -*- coding: utf-8 -*-
 
 import json
+import logging
 import requests
 from lxml import etree
-from .log import logger
+
+
+def get_logger(loglevel=None):
+    """
+    Get package logger
+    """
+    logger = logging.getLogger("unapi")
+    if not logger.handlers:
+        stream = logging.StreamHandler()
+        if loglevel is not None and loglevel != stream.level:
+            stream.setLevel(loglevel)
+        stream.setFormatter(logging.Formatter("%(asctime)s [%(levelname)s] %(name)s: %(message)s", "%Y-%m-%d %H:%M:%S"))
+        logger.addHandler(stream)
+        if loglevel is not None and loglevel != logger.level:
+            logger.setLevel(loglevel)
+    else:
+        if loglevel is not None and logger.level != loglevel:
+            logger.setLevel(loglevel)
+    return logger
 
 
 def get_request(url, headers={}):
@@ -11,10 +30,11 @@ def get_request(url, headers={}):
     Send HTTP GET request to given URL.
     """
     if "User-Agent" not in headers:
-        headers["User-Agent"] = "py-unapi 0.5.0"
+        headers["User-Agent"] = "py-unapi 0.5.1"
     try:
         return requests.get(url, headers=headers)
     except requests.exceptions.RequestException as err:
+        logger = get_logger()
         logger.error(err.__class__.__name__)
         return None
 
@@ -28,6 +48,7 @@ def response_ok(response):
     if response.status_code == 200:
         return True
     else:
+        logger = get_logger()
         logger.error("HTTP request to {0} failed!".format(response.url))
         logger.error("HTTP response code is {0}.".format(response.status_code))
         return False
