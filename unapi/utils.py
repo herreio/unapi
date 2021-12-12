@@ -30,7 +30,7 @@ def get_request(url, headers={}):
     Send HTTP GET request to given URL.
     """
     if "User-Agent" not in headers:
-        headers["User-Agent"] = "py-unapi 0.5.0"
+        headers["User-Agent"] = "py-unapi 0.5.1"
     try:
         return requests.get(url, headers=headers)
     except requests.exceptions.RequestException as err:
