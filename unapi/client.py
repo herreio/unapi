@@ -22,20 +22,21 @@ class Client:
         """
         response = utils.get_request(self.url)
         response = utils.response_xml(response)
-        schemas = [c for c in response.getchildren()]
-        formats = {}
-        for s in schemas:
-            n = s.attrib['name']
-            formats[n] = {}
-            if 'type' in s.attrib:
-                formats[n]['type'] = s.attrib['type']
-            else:
-                formats[n]['type'] = None
-            if 'docs' in s.attrib:
-                formats[n]['docs'] = s.attrib['docs']
-            else:
-                formats[n]['docs'] = None
-        return formats
+        if response is not None:
+            schemas = [c for c in response.getchildren()]
+            formats = {}
+            for s in schemas:
+                n = s.attrib['name']
+                formats[n] = {}
+                if 'type' in s.attrib:
+                    formats[n]['type'] = s.attrib['type']
+                else:
+                    formats[n]['type'] = None
+                if 'docs' in s.attrib:
+                    formats[n]['docs'] = s.attrib['docs']
+                else:
+                    formats[n]['docs'] = None
+            return formats
 
     def address(self, idvalue, format):
         """
@@ -48,8 +49,10 @@ class Client:
         """
         Request data of record specified by ID value in given format.
         """
-        self.logger.info("Request record {0} in format '{1}' from DB '{2}'.".format(idvalue, format, self.key))
         formats = self.formats
+        if formats is None:
+            return None
+        self.logger.info("Request record {0} in format '{1}' from DB '{2}'.".format(idvalue, format, self.key))
         if format in formats:
             formattype = formats[format]['type']
             url = self.address(idvalue, format)
