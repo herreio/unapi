@@ -1,3 +1,7 @@
+0.5.2
+
+- check for None response in Client.formats
+
 0.5.1
 
 - improve handling of logger
