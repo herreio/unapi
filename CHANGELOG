@@ -1,3 +1,7 @@
+0.5.3
+
+- update error log in utils.get_request
+
 0.5.2
 
 - check for None response in Client.formats
