@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import logging
 import argparse
 
 from .client import Client
@@ -13,8 +14,14 @@ def main():
     unapi_cli.add_argument('--id', type=str, help='record identifier')
     unapi_cli.add_argument('--format', type=str, help='record format', default="pp")
     unapi_cli.add_argument('--formats', type=bool, help='show supported formats', nargs="?", const=True, default=False)
+    unapi_cli.add_argument('--debug', type=bool, help='set log level to debug', nargs="?", const=True, default=False)
     unapi_args = unapi_cli.parse_args()
-    client = Client(url=unapi_args.url, key=unapi_args.db, idtype=unapi_args.idtype)
+    loglevel = logging.DEBUG if unapi_args.debug else logging.WARNING
+    client = Client(
+        url=unapi_args.url,
+        key=unapi_args.db,
+        idtype=unapi_args.idtype,
+        loglevel=loglevel)
     if unapi_args.formats:
         supported = list(client.formats.keys())
         supported.sort()
