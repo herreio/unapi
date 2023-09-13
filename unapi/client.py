@@ -49,7 +49,9 @@ class Client:
         """
         Request data of record specified by ID value in given format.
         """
-        if not lazy:
+        if lazy:
+            formattype = format
+        else:
             formats = self.formats
             if formats is None:
                 return None
@@ -61,7 +63,7 @@ class Client:
         url = self.address(idvalue, format)
         response = utils.get_request(url)
         if response is not None:
-            if plain or lazy:
+            if plain:
                 return utils.response_text(response)
             else:
                 if "xml" in formattype:
