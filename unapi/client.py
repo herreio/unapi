@@ -45,27 +45,28 @@ class Client:
         return self.url + "/?id=" + self.key + ":" + \
             self.idtype + ":" + idvalue + "&format=" + format
 
-    def request(self, idvalue, format, plain=False):
+    def request(self, idvalue, format, plain=False, lazy=False):
         """
         Request data of record specified by ID value in given format.
         """
-        formats = self.formats
-        if formats is None:
-            return None
-        self.logger.info("Request record {0} in format '{1}' from DB '{2}'.".format(idvalue, format, self.key))
-        if format in formats:
+        if not lazy:
+            formats = self.formats
+            if formats is None:
+                return None
+            if format not in formats:
+                self.logger.error("Format '{0}' is unsupported!".format(format))
+                return None
             formattype = formats[format]['type']
-            url = self.address(idvalue, format)
-            response = utils.get_request(url)
-            if response is not None:
-                if plain:
-                    return utils.response_text(response)
+        self.logger.info("Request record {0} in format '{1}' from DB '{2}'.".format(idvalue, format, self.key))
+        url = self.address(idvalue, format)
+        response = utils.get_request(url)
+        if response is not None:
+            if plain or lazy:
+                return utils.response_text(response)
+            else:
+                if "xml" in formattype:
+                    return utils.response_xml(response)
+                elif "json" in formattype:
+                    return utils.response_json(response)
                 else:
-                    if "xml" in formattype:
-                        return utils.response_xml(response)
-                    elif "json" in formattype:
-                        return utils.response_json(response)
-                    else:
-                        return utils.response_text(response)
-        else:
-            self.logger.error("Format '{0}' is unsupported!".format(format))
+                    return utils.response_text(response)
