@@ -15,6 +15,7 @@ def main():
     unapi_cli.add_argument('--format', type=str, help='record format', default="pp")
     unapi_cli.add_argument('--formats', type=bool, help='show supported formats', nargs="?", const=True, default=False)
     unapi_cli.add_argument('--debug', type=bool, help='set log level to debug', nargs="?", const=True, default=False)
+    unapi_cli.add_argument('--lazy', type=bool, help='don\'t check format input', nargs="?", const=True, default=False)
     unapi_args = unapi_cli.parse_args()
     loglevel = logging.DEBUG if unapi_args.debug else logging.WARNING
     client = Client(
@@ -30,7 +31,7 @@ def main():
     if unapi_args.id is None:
         unapi_cli.print_help()
         return None
-    response = client.request(unapi_args.id, unapi_args.format, plain=True)
+    response = client.request(unapi_args.id, unapi_args.format, plain=True, lazy=unapi_args.lazy)
     if response is not None:
         print(response)
         return None
