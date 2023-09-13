@@ -1,3 +1,8 @@
+0.5.5
+
+- add parameter lazy to Client.request
+- add argument lazy to CLI
+
 0.5.4
 
 - add argument debug to CLI
